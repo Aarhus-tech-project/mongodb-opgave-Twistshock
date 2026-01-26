@@ -12,7 +12,7 @@
 // docker run --name mongodb -d -p 27017:27017 mongo:latest
 
 // Run Node.js example:
-// node stub.js
+// node node mongodb-node-js-example\w3schools-mongodb-tutorial\stub.js
 
 const { MongoClient } = require('mongodb');
 
@@ -38,16 +38,62 @@ async function main() {
     const collection = db.collection(collectionName);
 
     // Insert one
-    const insertResult = await collection.insertOne({
+    const insertOneResult = await collection.insertOne(
+    {
       name: "John Doe",
       age: 25,
       major: "Computer Science"
     });
-    console.log('Inserted document:', insertResult.insertedId);
+    console.log('Inserted document:', insertOneResult.insertedId);
+
+    // Insert many
+    const insertManyResult = await collection.insertMany([
+    {
+      name: "Jane Doe",
+      age: 26,
+      major: "Astrophysics"
+    },
+    {
+      name: "Jon Doe",
+      age: 25,
+      major: "Computer Science"
+    },
+    {
+      name: "Daniel Carlsen",
+      age: 33,
+      major: "Biotechnology"
+    },
+    {
+      name: "Daniel Carlsen",
+      age: 33,
+      major: "Biotechnology"
+    },
+    {
+      name: "Daniel Carlsen",
+      age: 33,
+      major: "Biotechnology"
+    }]);
+    console.log('Inserted documents:', insertManyResult.insertedCount, insertManyResult.insertedIds);
 
     // Read
     const findResult = await collection.findOne({ name: "John Doe" });
     console.log('Found document:', findResult);
+    const findAllresult = await collection.find().toArray();
+    console.log('Displaying entire db:', findAllresult);
+
+    // Clear Jon Doe specifically, he's a duplicate and misspelled
+    const deleteJohnDoes = await collection.deleteOne({ name: "Jon Doe" });
+    console.log("Deleted Jon Does:", deleteJohnDoes.deletedCount);
+
+    // I was impatient and refreshed a bunch while creating myself, making duplicates, so we clear me from the DB and crate a single one.
+    const deleteMes = await collection.deleteMany({ name: "Daniel Carlsen"});
+    console.log("Deleted " + deleteMes.deletedCount + " copies of myself");
+    const createMe = await collection.insertOne({ name: "Daniel Carlsen", age: 32, major: "Biotechnology"});
+    const findMe = await collection.findOne({ name: "Daniel Carlsen", age: 33});
+    console.log("Looks like I made a mistake, no hits:", findMe);
+    const updateMe = await collection.updateOne({name: "Daniel Carlsen"}, {$set: {age: 33}});
+    const findMeAgain = await collection.findOne({ name: "Daniel Carlsen", age: 33});
+    console.log("Am I here yet?", findMeAgain);
 
   } catch (err) {
     console.error('Error: ', err);
