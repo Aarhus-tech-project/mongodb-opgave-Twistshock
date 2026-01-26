@@ -9,3 +9,14 @@ I skal udbygge stubben, så den indeholder eksempler på alle operationer fra W3
 
 I kan finde tutorialen her: https://www.w3schools.com/mongodb/index.php
 
+
+
+To-Do til mig selv derhjemme:
+
+
+Aktiver virtualisering
+1. Open Windows Features: Press Win + R, type optionalfeatures, and press Enter,or search "Turn Windows features on or off" in the Start Menu.
+2. Enable Platforms: Check the boxes for Virtual Machine Platform, WindowsHypervisor Platform, and Hyper-V.
+3. Restart: Click OK and restart your computer when prompted to apply changes.
+4. Installer Docker Desktopwinget install Docker.DockerDesktop
+5. Kør MongoDB Docker containerdocker run --name mongodb -d -p 27017:27017 mongo:latest
