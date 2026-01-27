@@ -16,12 +16,21 @@
 
 import { firstNames, lastNames } from './names.js';
 
+function getRandomInt(stringsObj)
+{
+    const item = Object.values = Object.values(stringsObj);
+    return item[Math.floor(Math.random() * item.length)];
+}
+
 const { MongoClient } = require('mongodb');
 
 const url = 'mongodb://localhost:27017/';
 const client = new MongoClient(url);
 const dbName = 'school';
 const collectionName = 'students'
+const studentCount = 20;
+const minAge = 18;
+const maxage = 25;
 
 async function main() {
   
