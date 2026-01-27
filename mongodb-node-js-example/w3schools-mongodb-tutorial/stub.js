@@ -14,6 +14,8 @@
 // Run Node.js example:
 // node node mongodb-node-js-example\w3schools-mongodb-tutorial\stub.js
 
+import { firstNames, lastNames } from './names.js';
+
 const { MongoClient } = require('mongodb');
 
 const url = 'mongodb://localhost:27017/';
