@@ -74,6 +74,16 @@ async function main() {
       major: "Biotechnology"
     }]);
     console.log('Inserted documents:', insertManyResult.insertedCount, insertManyResult.insertedIds);
+    
+    // Insert more as a loop
+    const { firstNames, lastNames } = await import('./names.js');
+    const count = Math.min(firstNames.length, lastNames.length);
+    for (let i = 0; i < count; i++) {
+      const name = `${firstNames[i]} ${lastNames[i]}`;
+      const age = 18 + Math.floor(Math.random() * 13);
+      const res = await collection.insertOne({ name, age, major: 'Undeclared' });
+    }
+
 
     // Read
     const findResult = await collection.findOne({ name: "John Doe" });
@@ -94,6 +104,10 @@ async function main() {
     const updateMe = await collection.updateOne({name: "Daniel Carlsen"}, {$set: {age: 33}});
     const findMeAgain = await collection.findOne({ name: "Daniel Carlsen", age: 33});
     console.log("Am I here yet?", findMeAgain);
+
+    // Empty the collection (do not drop the database)
+    const clearAll = await collection.deleteMany({});
+    console.log('Cleared documents count:', clearAll.deletedCount);
 
   } catch (err) {
     console.error('Error: ', err);
