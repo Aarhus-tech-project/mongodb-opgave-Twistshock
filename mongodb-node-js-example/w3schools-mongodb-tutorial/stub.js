@@ -14,7 +14,8 @@
 // Run Node.js example:
 // node node mongodb-node-js-example\w3schools-mongodb-tutorial\stub.js
 
-import { firstNames, lastNames } from './names.js';
+import { MongoClient } from 'mongodb';
+import { names } from './names.js';
 
 function getRandomInt(stringsObj)
 {
@@ -22,7 +23,7 @@ function getRandomInt(stringsObj)
     return item[Math.floor(Math.random() * item.length)];
 }
 
-const { MongoClient } = require('mongodb');
+//const { MongoClient } = require('mongodb');
 
 const url = 'mongodb://localhost:27017/';
 const client = new MongoClient(url);
@@ -86,11 +87,10 @@ async function main() {
     }]);
     console.log('Inserted documents:', insertManyResult.insertedCount, insertManyResult.insertedIds);
     
-    // Insert more as a loop
-    const { firstNames, lastNames } = await import('./names.js');
-    const count = Math.min(firstNames.length, lastNames.length);
+    // Create additional students.
+    const count = Math.min(names.firstNames.length, names.lastNames.length);
     for (let i = 0; i < count; i++) {
-      const name = `${firstNames[i]} ${lastNames[i]}`;
+      const name = `${names.firstNames[i]} ${names.lastNames[i]}`;
       const age = 18 + Math.floor(Math.random() * 13);
       const res = await collection.insertOne({ name, age, major: 'Undeclared' });
     }
@@ -99,7 +99,8 @@ async function main() {
     // Read
     const findResult = await collection.findOne({ name: "John Doe" });
     console.log('Found document:', findResult);
-    const findAllresult = await collection.find().toArray();
+    // Show all students sans _id, youngest first.
+    const findAllresult = await collection.find({}, { projection: { _id: 0 } }).sort({ age: 1 }).toArray();
     console.log('Displaying entire db:', findAllresult);
 
     // Clear Jon Doe specifically, he's a duplicate and misspelled
@@ -111,12 +112,16 @@ async function main() {
     console.log("Deleted " + deleteMes.deletedCount + " copies of myself");
     const createMe = await collection.insertOne({ name: "Daniel Carlsen", age: 32, major: "Biotechnology"});
     const findMe = await collection.findOne({ name: "Daniel Carlsen", age: 33});
+    
     console.log("Looks like I made a mistake, no hits:", findMe);
     const updateMe = await collection.updateOne({name: "Daniel Carlsen"}, {$set: {age: 33}});
     const findMeAgain = await collection.findOne({ name: "Daniel Carlsen", age: 33});
     console.log("Am I here yet?", findMeAgain);
 
-    // Empty the collection (do not drop the database)
+    // Sorting samples
+
+
+    // Empty the collection
     const clearAll = await collection.deleteMany({});
     console.log('Cleared documents count:', clearAll.deletedCount);
 
