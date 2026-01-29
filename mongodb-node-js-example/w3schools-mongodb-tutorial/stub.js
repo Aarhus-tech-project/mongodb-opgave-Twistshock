@@ -173,7 +173,7 @@ async function main() {
     console.log("$mod - age divisible by 5:", await collection.find({ age: { $mod: [5, 0] } }, proj).toArray());
     // Creating an index for $text
     // Also covers "Indexing & Search" on W3schools
-    await collection.createIndex({ name: "text", major: "text" }); // Text requires an index
+    await collection.createIndex({ major: "text" }); // Text requires an index
     console.log("$text - search 'Science':", await collection.find({ $text: { $search: "Science" } }, proj).toArray());
 
     //
@@ -234,7 +234,7 @@ async function main() {
     ]).toArray());
 
     // $limit
-    console.log("$limit - top 3 oldest:", await collection.aggregate([
+    console.log("$limit - 3 oldest:", await collection.aggregate([
       { $sort: { age: -1 } },
       { $limit: 3 },
       { $project: { _id: 0, name: 1, age: 1 } }
@@ -285,7 +285,7 @@ async function main() {
 
     // Empty the collection, clear indexes, drop collections
     const clearAll = await collection.deleteMany({});
-    await collection.dropIndex("name_text_major_text")
+    await collection.dropIndex("major_text")
     await majorsCollection.drop();
     await compSciCollection.drop();
     console.log('Cleared documents count:', clearAll.deletedCount);
