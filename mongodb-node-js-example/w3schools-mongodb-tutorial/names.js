@@ -11,4 +11,8 @@ static lastNames = [
   "Davis", "Miller", "Wilson", "Anderson", "Taylor",
   "Thomas", "Moore", "Jackson", "White", "Harris"
 ];
+
+static majors = [
+  "Biotechnology", "Psychology", "Astrophysics", "Computer Sience" //Intentional misspelling
+]
 }
